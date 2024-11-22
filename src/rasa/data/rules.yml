@@ -1,0 +1,33 @@
+version: "3.1"
+
+rules:
+
+- rule: Say goodbye anytime the user says goodbye
+  steps:
+  - intent: goodbye
+  - action: utter_goodbye
+
+- rule: Say 'I am a bot' anytime the user challenges
+  steps:
+  - intent: bot_challenge
+  - action: utter_iamabot
+
+- rule: Ask for menu
+  steps:
+  - intent: ask_for_menu
+  - action: action_present_menu
+
+- rule: Handle Check for outage
+  steps:
+  - intent: check_outage
+  - action: utter_suply_location
+
+- rule: Handle Option 2
+  steps:
+  - intent: option_2
+  - action: utter_option_2
+
+- rule: Handle Option 3
+  steps:
+  - intent: option_3
+  - action: utter_option_3

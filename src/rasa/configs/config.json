@@ -1,0 +1,15 @@
+{
+  "VumatelEndpoint": "https://pangea-staging.vumatel.co.za/ssa/",
+  "request_timeout": "60",
+  "actionServerLogger": {
+    "logLevel": "DEBUG",
+    "directory": "./logs",
+    "name": "action_server"
+  },
+  "chatbotLogger": {
+    "logLevel": "INFO",
+    "directory": "./logs",
+    "name": "chatbot"
+  },
+  "channelType": 1
+}

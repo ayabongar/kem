@@ -1,0 +1,6 @@
+.venv/
+__pycache__/
+
+src/rasa/.rasa/*
+src/rasa/models/
+src/rasa/actions/constants.py
