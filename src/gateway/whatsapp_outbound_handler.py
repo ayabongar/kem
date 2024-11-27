@@ -11,32 +11,32 @@ class WhatsappOutboundHandler(SessionBaseHandler):
     async def post(self):
         print("starting outbound process...")
         bot_responses = json.loads(self.request.body)
-        print(f"response from rasa: {bot_responses}")
+        print(f"response from rasa: {bot_responses}") 
 
-        if 'sender' in self.session:
+         if 'sender' in self.session:
             session_id = self.session['sender']
             print(f"sender: {session_id}")
         
-        for bot_response in bot_responses:
-            if bot_response.get("text") is not None:
-                data, template_url = self.BuildTextResponse(bot_response, bot_response["recipient_id"])
-            elif bot_response["custom"].get("type") == "INTERACTIVE_LIST":
-                data, template_url = self.BuildInteractiveList(bot_response["custom"], bot_response["recipient_id"])
-            elif bot_response["custom"].get("type") == "TEXT":
-                data, template_url = self.BuildTextResponse(bot_response["custom"], bot_response["recipient_id"])
+        # Ensure to always use the last response from the Bot [-1]
+        if bot_responses[-1].get("text") is not None:
+            data, templateUrl = self.BuildTextResponse(bot_responses[-1], bot_responses[-1]["recipient_id"])
+        elif bot_responses[-1]["custom"].get("type") == "INTERACTIVE_LIST":
+            data, templateUrl = self.BuildInteractiveList(bot_responses[-1]["custom"], bot_responses[-1]["recipient_id"])
+        elif bot_responses[-1]["custom"].get("type") == "TEXT":
+            data, templateUrl = self.BuildTextResponse(bot_responses[-1]["custom"], bot_responses[-1]["recipient_id"])
 
-            print(f"Data for Infobip: {data}")
+        print(f"Data for Infobip: {data}")
 
-            asyncHttp = AsyncHTTPClient()
-            asyncHttp.fetch(
-                HTTPRequest(
-                    base_url + template_url,
-                    headers={"Authorization": f"App {api_key}", "Content-Type": "application/json"},
-                    method="POST",
-                    body=json.dumps(data),
-                ),
-                raise_error=False
-            )
+        asyncHttp = AsyncHTTPClient()
+        asyncHttp.fetch(
+            HTTPRequest(
+                base_url + templateUrl,
+                headers={"Authorization": f"App {api_key}", "Content-Type": "application/json"},
+                method="POST",
+                body=json.dumps(data),
+            ),
+            raise_error=False
+        )
         print("outbound process complete")
 
         self.set_status(200)
@@ -57,7 +57,7 @@ class WhatsappOutboundHandler(SessionBaseHandler):
                         }
                     }
                 }
-            template_url = "/whatsapp/1/message/interactive/buttons"
+            templateUrl = "/whatsapp/1/message/interactive/buttons"
         else:
             payload = {
                     "from": "447860099299",
@@ -67,9 +67,9 @@ class WhatsappOutboundHandler(SessionBaseHandler):
                         "text": bot_response["text"]
                     }
                 }
-            template_url = "/whatsapp/1/message/text"
+            templateUrl = "/whatsapp/1/message/text"
 
-        return payload, template_url
+        return payload, templateUrl
     
     def BuildInteractiveList(self, bot_response, recipient_id):
         payload = {
@@ -81,7 +81,7 @@ class WhatsappOutboundHandler(SessionBaseHandler):
                     "text": bot_response["text"]
                 },
                 "action": {
-                    "title": bot_response["text"],
+                    "title": "Choose an option",
                     "sections": [
                         {
                             "rows": self.BuildListButtons(bot_response["buttons"])
@@ -90,8 +90,8 @@ class WhatsappOutboundHandler(SessionBaseHandler):
                 }
             }
         }
-        template_url = "/whatsapp/1/message/interactive/list"
-        return payload, template_url
+        templateUrl = "/whatsapp/1/message/interactive/list"
+        return payload, templateUrl
     
     def BuildInteractiveButtons(self, buttons):
         print(f"Data for buttons: {buttons}")

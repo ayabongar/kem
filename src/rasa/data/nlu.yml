@@ -107,10 +107,11 @@ nlu:
 
 - intent: provide_location
   examples: |
-    - Here’s my location
-    - I'm sending my location
-    - Here’s my pin
-    - My GPS coordinates are
+    - Here’s my location [-26.1507068](location_lat), [28.367639](location_lng)
+    - I'm sending my location [-26.1507068](location_lat), [28.367639](location_lng)
+    - Here’s my pin [-26.1507068](location_lat), [28.367639](location_lng)
+    - My GPS coordinates are [-26.1507068](location_lat), [28.367639](location_lng)
+    - [-26.1507068](location_lat), [28.367639](location_lng)
  
  
 

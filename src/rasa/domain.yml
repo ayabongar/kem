@@ -17,23 +17,25 @@ intents:
 
 entities:
   - location_lat
-  - location_log
+  - location_lng
+
+regex:
+  location_lat: '[-+]?\d{1,3}\.*\d+°? ?S?'
+  location_lng: '[-+]?\d{1,3}\.*\d+°? ?S?'
 
 slots:
   location_lat:
-    type: float
+    type: text
     influence_conversation: false
-    min_value: -180
-    max_value: 180
     mappings:
-    - type: custom
-  location_log:
-    type: float
+    - type: from_entity
+      entity: location_lat
+  location_lng:
+    type: text
     influence_conversation: false
-    min_value: -180
-    max_value: 180
     mappings:
-    - type: custom
+    - type: from_entity
+      entity: location_lng
 
 actions:
   - action_present_menu
@@ -56,7 +58,7 @@ responses:
   - text: "Great, carry on!"
 
   utter_goodbye:
-  - text: "Bye"
+  - text: "Thanks for using Vumatel, please visit agian. Goodbye."
 
   utter_iamabot:
   - text: "I am a bot, powered by Rasa."
